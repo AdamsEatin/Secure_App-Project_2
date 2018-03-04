@@ -14,38 +14,28 @@
 				$errC = $_SESSION["errorCode"];
 				switch($errC){
 					case 0:
-						echo "<h3>Error receiving Authorization</h3>";
+						echo "<h3>Failed to authenticate username and password at this time.<br><br>Lockout will occur after 5 failed attempts within 5 minutes.</h3>";
 						break;
 					case 1:
-						$user = $_SESSION["uName"];
-						echo "<h3>Account: $user<br>Failed to authenticate username and password at this time.<br><br>Lockout will occur after 3 failed attempts within 5 minutes.</h3>";
+						echo "<h3>This account is currently locked out.</h3>";
 						break;
 					case 2:
-						echo "<h3>This session is currently locked out.</h3>";
-						break;
-					case 3:
 						echo "<h3>Username not recognized.</h3>";
 						break;
-					case 4:
-						echo "<h3>No Session in DB, try again.</h3>";
-						break;
-					case 5:
+					case 3:
 						echo "<h3>Account successfully registered!<br>Please login to continue.</h3>";
 						break;
-					case 6:
-						echo "<h3>Username already present.</h3>";
-						break;
-					case 7:
+					case 4:
 						echo "<h3>Password changed successfully.<br>Please login with your new password to re-authenticate.</h3>";
 						break;
-					case 8:
+					case 5:
 						echo "<h3>Updating password has failed.</h3>";
 						break;
-					case 9:
-						echo "<h3>Account has timed out due to inactivity.</h3>";
+					case 6:
+						echo "<h3>Database Successfully created.</h3>";
 						break;
-					case 10:
-						echo "<h3>Session not valid.</h3>";
+					case 7:
+						echo "<h3>Error creating the Database at this time.</h3>";
 						break;
 				}
 			}
@@ -66,9 +56,13 @@
 		
 		<br>
 		<form>
-			<a href= "/create_DB.php">
+			<a href= "/create_db.php">
 			<input type="button" value="Build DB">
 			</a>
 		</form>
 	</body>
 </html>
+
+<?php
+	unset($_SESSION["errorCode"]);
+?>
