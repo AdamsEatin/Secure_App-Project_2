@@ -64,5 +64,7 @@
 </html>
 
 <?php
+if(isset($_SESSION["errorCode"])){
 	unset($_SESSION["errorCode"]);
+}
 ?>
