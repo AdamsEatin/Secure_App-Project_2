@@ -31,20 +31,10 @@ session_start();
 				$errC = $_SESSION["errorCode"];
 				switch($errC){
 					case 1:
-						echo "<h3>Account successfully registered!<br>Please login to continue.</h3>";
-						break;
-					case 2:
 						echo "<h3>Username or email already present.</h3>";
 						break;
-					case 3:
+					case 2:
 						echo "<h3>Values were missing from the form.</h3>";
-						break;
-					case 4:
-						$userS = $_SESSION["userS"];
-						$emailS = $_SESSION["emailS"];
-						$passS = $_SESSION["passS"];
-						$dobS = $_SESSION["dobS"];
-						echo "<h3>userID: $userS<br>email: $emailS<br>password: $passS<br>dob: $dobS</h3>";
 						break;
 				}
 			}

@@ -20,7 +20,7 @@ $dob = htmlspecialchars($dobVal);
 
 //Assuring that the values have been set
 if(!isset($user) || !isset($pass) || !isset($email) || !isset($dob)){
-	$errorC = 3;
+	$errorC = 2;
 	$_SESSION["errorCode"] = $errorC;
 	header("Location:Register.php");
 	exit();
@@ -43,7 +43,7 @@ else{
 		}
 		//If duplicates present, redirect back to the Register page informing the user
 		if($duplicate == TRUE){
-			$errorC = 2;
+			$errorC = 1;
 			$_SESSION["errorCode"] = $errorC;
 			header("Location:Register.php");
 			exit();
