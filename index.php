@@ -42,7 +42,6 @@
 						echo "<h3>Login Success!</h3>";
 						break;
 					case 9:
-						$testVal = $_SESSION["testVal"];
 						echo "<h3>This probably shouldn't have happened...</h3>";
 						break;
 				}
