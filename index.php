@@ -10,6 +10,7 @@
 		<h1>Secure App System 2.0</h1>
 		<h2>Please enter your details below to Login</h2>
 		<?php
+			session_start();	
 			if(isset($_SESSION["errorCode"])){
 				$errC = $_SESSION["errorCode"];
 				switch($errC){
@@ -36,6 +37,13 @@
 						break;
 					case 7:
 						echo "<h3>Error creating the Database at this time.</h3>";
+						break;
+					case 8:
+						echo "<h3>Login Success!</h3>";
+						break;
+					case 9:
+						$testVal = $_SESSION["testVal"];
+						echo "<h3>This probably shouldn't have happened...</h3>";
 						break;
 				}
 			}
