@@ -19,12 +19,12 @@ session_start();
 		</script>
 		
 		<meta charset="UTF-8">
-		<title>Secure App : Register</title>
+		<title>Secure App System 2.0 : Register</title>
 		<link rel="stylesheet" type="text/css" href="main_page.css">
 	</head>
 	
 	<body>
-		<h1>Secure App System</h1>
+		<h1>Secure App System 2.0 : Registration</h1>
 		<h2>Please enter your details below to Register</h2>
 		<?php		
 			if(isset($_SESSION["errorCode"])){
@@ -54,7 +54,7 @@ session_start();
 	
 			<input type="submit" name="submit" value="Register" onclick="return validatePassword()">
 			<a href = "/Index.php">
-			<input type="button" value="Back">
+			<input type="button" value="Home">
 			</a>
 		</form>
 	</body>

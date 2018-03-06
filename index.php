@@ -2,12 +2,12 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Secure App 2.0 : Login </title>
+		<title>Secure App System 2.0 : Login </title>
 		<link rel="stylesheet" type="text/css" href="main_page.css">
 	</head>
 	
 	<body>
-		<h1>Secure App System 2.0</h1>
+		<h1>Secure App System 2.0 : Login</h1>
 		<h2>Please enter your details below to Login</h2>
 		<?php
 			session_start();	
@@ -56,15 +56,23 @@
 			<input type="password" name="password" placeholder="Enter Password" required><br><br>
 	
 			<input type="submit" name="submit" value="Submit">
+			
 			<a href = "/Register.php">
 			<input type="button" value="Register">
-			</a>	
+			</a>
+		</form>
+		
+		<br>
+		<form>
+			<a href = "/PasswordReset.php">
+			<input type="button" value="Password Reset">
+			</a>
 		</form>
 		
 		<br>
 		<form>
 			<a href= "/create_db.php">
-			<input type="button" value="Build DB">
+			<input type="button" value="Build DataBase">
 			</a>
 		</form>
 	</body>
