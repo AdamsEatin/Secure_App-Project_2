@@ -52,9 +52,9 @@ session_start();
 			<label><b>Date Of Birth</b></label>
 			<input type="date" name="dob" required><br><br>
 	
-			<input type="submit" name="submit" value="Submit" onclick="return validatePassword()">
+			<input type="submit" name="submit" value="Register" onclick="return validatePassword()">
 			<a href = "/Index.php">
-			<input type="button" value="Login">
+			<input type="button" value="Back">
 			</a>
 		</form>
 	</body>

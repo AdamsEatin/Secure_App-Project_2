@@ -18,7 +18,7 @@ $pass = htmlspecialchars($passVal);
 $email = htmlspecialchars($emailVal);
 $dob = htmlspecialchars($dobVal);
 
-//Assuring that the values have been set
+//Checking that values have been set
 if(!isset($user) || !isset($pass) || !isset($email) || !isset($dob)){
 	$errorC = 2;
 	$_SESSION["errorCode"] = $errorC;
@@ -26,48 +26,53 @@ if(!isset($user) || !isset($pass) || !isset($email) || !isset($dob)){
 	exit();
 }
 else{
-	//SQL Query to select all values from table
+	//SQL Query to pull all rows from the table
 	$checkSQL = "SELECT * FROM user_tb";
 	$result = $conn->query($checkSQL);
-	$duplicate = FALSE;
-	
 	$count = mysqli_num_rows($result);
+	
+	//If there are any rows in the table we have to check for duplicates
 	if($count != 0){
-		//While there are rows present, check for the entered username and email being present
+		//boolean values for presence of duplicate username or email
+		$dup_user = FALSE;
+		$dup_email = FALSE;
+		
+		//If either the username or email are already present, update the associated boolean values
 		while($row = $result->fetch_assoc()){
-			//If either username or password match, set duplicate to true and break the loop
-			if(password_verify($user, $row['userID']) || password_verify($email, $row['email'])){
-				$duplicate = TRUE;
-				break;
+			if($user == $row['userID']){
+				$dup_user = TRUE;
+			}
+			if(password_verify($email, $row['email'])){
+				$dup_email == TRUE;
 			}
 		}
-		//If duplicates present, redirect back to the Register page informing the user
-		if($duplicate == TRUE){
+		
+		//If either of the booleans are set to True, return the user with an error
+		if($dup_user || $dup_email){
 			$errorC = 1;
 			$_SESSION["errorCode"] = $errorC;
 			header("Location:Register.php");
 			exit();
-		}//Else encrypt and store the new details
-		else{
-			$enc_user = password_hash($user, PASSWORD_DEFAULT);
-			$enc_pass = password_hash($pass, PASSWORD_DEFAULT);
-			$enc_email = password_hash($email, PASSWORD_DEFAULT);
-			$enc_dob = password_hash($dob, PASSWORD_DEFAULT);
-			
-			$insert_SQL = "INSERT INTO `user_tb`(`userID`, `password`, `email`, `dob`) VALUES ('$enc_user', '$enc_pass', '$enc_email', '$enc_dob')";
-			$conn->query($insert_SQL);
-			$_SESSION["errorCode"] = 3;
-			header("Location:index.php");
-			exit();
 		}
-	}else{
-		//Encrypt and enter user details
-		$enc_user = password_hash($user, PASSWORD_DEFAULT);
+		
+		//otherwise encrypt and enter the users information
 		$enc_pass = password_hash($pass, PASSWORD_DEFAULT);
 		$enc_email = password_hash($email, PASSWORD_DEFAULT);
 		$enc_dob = password_hash($dob, PASSWORD_DEFAULT);
 			
-		$insert_SQL = "INSERT INTO `user_tb`(`userID`, `password`, `email`, `dob`) VALUES ('$enc_user', '$enc_pass', '$enc_email', '$enc_dob')";
+		$insert_SQL = "INSERT INTO `user_tb`(`userID`, `password`, `email`, `dob`) VALUES ('$user', '$enc_pass', '$enc_email', '$enc_dob')";
+		$conn->query($insert_SQL);
+		$_SESSION["errorCode"] = 3;
+		header("Location:index.php");
+		exit();
+	}
+	//If there are no current entries in the table we can simply insert the user' information
+	else{
+		$enc_pass = password_hash($pass, PASSWORD_DEFAULT);
+		$enc_email = password_hash($email, PASSWORD_DEFAULT);
+		$enc_dob = password_hash($dob, PASSWORD_DEFAULT);
+			
+		$insert_SQL = "INSERT INTO `user_tb`(`userID`, `password`, `email`, `dob`) VALUES ('$user', '$enc_pass', '$enc_email', '$enc_dob')";
 		$conn->query($insert_SQL);
 		$_SESSION["errorCode"] = 3;
 		header("Location:index.php");

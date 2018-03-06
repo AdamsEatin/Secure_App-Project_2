@@ -21,7 +21,7 @@
 		Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
 		
 		<form>
-			<button formaction="/Index.php">Logout</button>
+			<button formaction="/index.php">Logout</button>
 		</form>
 	</body>
 </html>

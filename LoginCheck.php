@@ -15,43 +15,36 @@ $user = htmlspecialchars($userVal);
 $pass = htmlspecialchars($passVal);
 
 //Check table for username
-$loginCheckSQL = "SELECT * FROM user_tb";
-$loginResult = $conn->query($loginCheckSQL);
-$loginFound = FALSE;
+$loginCheckSQL = "SELECT * FROM `user_tb` WHERE `userID` = '$user'";
+$result = $conn->query($loginCheckSQL);
+$loginRow = $result->fetch_assoc();
+$count = mysqli_num_rows($result);
 
-while($loginRow = $loginResult->fetch_assoc()){
-	if(password_verify($user, $loginRow['userID'])){
-		$userN = $loginRow['userID'];
-		$passW = $loginRow['password'];
- 		$loginFound = TRUE;
-		break;
-	}
-}
-//Username not found in DB
-if($loginFound == FALSE){
+//If no results, return to index
+if($count == 0){
 	$_SESSION["errorCode"] = 2;
 	header("Location:index.php");
 	exit();
 }
-//If username found in DB
 else{
-	$lockoutCheckSQL = "SELECT * FROM `login_tb` WHERE `userID`='$userN'";
+	$lockoutCheckSQL = "SELECT * FROM `login_tb` WHERE `userID`='$user'";
 	$lockoutResult = $conn->query($lockoutCheckSQL);
 	$count = mysqli_num_rows($lockoutResult);
 	
 	//If username not present in login_tb make a new entry for it
 	if($count == 0){
-		$insertSQL = "INSERT INTO `login_tb`(`userID`, `failed_login_count`, `last_failed_login`) VALUES ('$userN', 0, now())";
+		$insertSQL = "INSERT INTO `login_tb`(`userID`, `failed_login_count`, `last_failed_login`) VALUES ('$user', 0, now())";
 		$conn->query($insertSQL);
 		
-		$lockoutCheckSQL = "SELECT * FROM `login_tb` WHERE `userID`='$userN'";
+		$lockoutCheckSQL = "SELECT * FROM `login_tb` WHERE `userID`='$user'";
 		$lockoutResult = $conn->query($lockoutCheckSQL);
 	}
-	
+
 	//get values associated with row
 	$lockoutRow = $lockoutResult->fetch_assoc();
 	$row_count = $lockoutRow['failed_login_count'];
 	$row_time = strtotime($lockoutRow['last_failed_login']);
+	
 	//Calculate time since last failed login
 	$now = time();
 	$diff = $now - $row_time;
@@ -59,7 +52,7 @@ else{
 	//If failed login count is 5 or greater and the last failed 
 	//login attempt was under 5m ago, user is locked out.
 	if($row_count >= 5 && $diff < 300){
-		$lockedOutSQL = "UPDATE `login_tb` SET `failed_login_count`=`failed_login_count`+1 ,`last_failed_login`=now() WHERE `userID` = '$userN'";
+		$lockedOutSQL = "UPDATE `login_tb` SET `failed_login_count`=`failed_login_count`+1 ,`last_failed_login`=now() WHERE `userID` = '$user'";
 		$conn->query($lockedOutSQL);	
 		$_SESSION["errorCode"] = 1;
 		header("Location:index.php");
@@ -67,19 +60,17 @@ else{
 	}
 	else{
 		//compare password values
-		if(password_verify($pass, $passW)){
-			$loginSuccessSQL = "UPDATE `login_tb` SET `failed_login_count`=0 WHERE `userID` = '$userN'";
+		if(password_verify($pass, $loginRow['password'])){
+			$loginSuccessSQL = "UPDATE `login_tb` SET `failed_login_count`=0 WHERE `userID` = '$user'";
 			$conn->query($loginSuccessSQL);
 				
-			//Temp return to index showing login success
-			$_SESSION["errorCode"] = 8;
-			header("Location:index.php");
+			//Send user to welcome page, showing login successful
+			header("Location:Welcome.php");
 			exit();
-			//TODO : proceed to welcome page
 		}
 		//If password mismatch
 		else{
-			$loginFailSQL = "UPDATE `login_tb` SET `failed_login_count`=`failed_login_count`+1 ,`last_failed_login`=now() WHERE `userID` = '$userN'";
+			$loginFailSQL = "UPDATE `login_tb` SET `failed_login_count`=`failed_login_count`+1 ,`last_failed_login`=now() WHERE `userID` = '$user'";
 			$conn->query($loginFailSQL);
 				
 			//Return failed login
@@ -95,4 +86,5 @@ header("Location:index.php");
 exit();
 
 ?>
+	
 
