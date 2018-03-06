@@ -19,6 +19,8 @@ $checkSQL = "SELECT * FROM user_tb";
 $result = $conn->query($checkSQL);
 $email_present = FALSE;
 
+//checking whether or not the email is present in the main user table
+//if it is, set the boolean value to True and break the loop.
 while($row = $result->fetch_assoc()){
 	$row_email = $row['email'];
 	if(password_verify($email, $row_email)){
@@ -52,6 +54,7 @@ if($email_present){
 		exit();
 	}
 	else{
+		//Update the existing entry with the newly generated token, update it's expiration datetime
 		$updateSQL = "UPDATE `reset_tb` SET `token`='$token',`expiration`='$expiration' WHERE `email`='$row_email'";
 		$conn->query($updateSQL);
 		
