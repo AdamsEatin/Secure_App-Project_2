@@ -5,19 +5,6 @@ session_start();
 <!DOCTYPE html>
 <html>
 	<head>
-		<script>
-		function validatePassword(){
-			var regexCheck = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
-			var pass = document.forms["regForm"]["password"].value;
-			if(regexCheck.test(pass)){
-				return true;
-			}else{
-				alert("Passwords must; \n-Contain 1 uppercase letter \n-Contain 1 lower case letter \n-Contain 1 numeric character \n-Be at least 8 characters long")
-				return false;
-			}
-		}
-		</script>
-		
 		<meta charset="UTF-8">
 		<title>Secure App System 2.0 : Register</title>
 		<link rel="stylesheet" type="text/css" href="main_page.css">
@@ -34,7 +21,11 @@ session_start();
 						echo "<h3>Username or email already present.</h3>";
 						break;
 					case 2:
-						echo "<h3>Values were missing from the form.</h3>";
+						echo "<h3>Password did not match the required format</h3>";
+						break;
+					case 3:
+						$msg = $_SESSION["msg"];
+						echo "<h3>$msg</h3>";
 						break;
 				}
 			}
@@ -52,7 +43,7 @@ session_start();
 			<label><b>Date Of Birth</b></label>
 			<input type="date" name="dob" required><br><br>
 	
-			<input type="submit" name="submit" value="Register" onclick="return validatePassword()">
+			<input type="submit" name="submit" value="Register">
 			<a href = "/Index.php">
 			<input type="button" value="Home">
 			</a>
@@ -63,4 +54,5 @@ session_start();
 
 <?php
     unset($_SESSION["errorCode"]);
+	unset($_SESSION["msg"]);
 ?>

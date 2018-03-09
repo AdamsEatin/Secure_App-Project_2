@@ -44,6 +44,9 @@
 					case 9:
 						echo "<h3>This probably shouldn't have happened...</h3>";
 						break;
+					case 10:
+						$msg = $_SESSION["msg"];
+						echo "<h3>'$msg'</h3>";
 				}
 			}
 		?>  

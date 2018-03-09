@@ -1,11 +1,8 @@
 <?php 
 session_start();
 date_default_timezone_set("UTC");
+include 'config.php';
 
-$servername = "localhost";
-$username = "root";
-$password = "secret";
-$databasename = "secureapp_db";
 $conn = new mysqli($servername, $username, $password, $databasename);
 
 $emailVal = $_POST["email"];
@@ -13,6 +10,7 @@ $emailVal = $_POST["email"];
 //clean values from special characters
 $email = htmlspecialchars($emailVal);
 
+$enc_email = encrypt($email);
 
 //Pull all rows from user table to compare entered email against
 $checkSQL = "SELECT * FROM user_tb";
@@ -23,7 +21,8 @@ $email_present = FALSE;
 //if it is, set the boolean value to True and break the loop.
 while($row = $result->fetch_assoc()){
 	$row_email = $row['email'];
-	if(password_verify($email, $row_email)){
+	$dec_email = decrypt($row_email);
+	if($email == $dec_email){
 		$email_present = TRUE;
 		break;
 	}

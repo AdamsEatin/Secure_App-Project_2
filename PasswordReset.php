@@ -38,10 +38,10 @@ session_start();
 						echo "<h3>Incorrect Date of birth.</h3>";
 						break;
 					case 3:
-						echo "<h3>Incorrect Date of birth.</h3>";
+						echo "<h3>Password format was not correct.</h3>";
 						break;
 					case 4:
-						echo "<h3>Reset Token was valid.</h3>";
+						echo "<h3>Reset Token has expired.</h3>";
 						break;
 					case 5:
 						echo "<h3>Reset Token was not found.</h3>";
@@ -52,6 +52,9 @@ session_start();
 					case 7:
 						$reset_tok = $_SESSION["reset_tok"];
 						echo "<h3>This token is valid for 5 minutes:<br> <i>$reset_tok</i></h3>";
+						break;
+					case 8:
+						echo "<h3>Passed</h3>";
 						break;
 				}
 			}
@@ -67,14 +70,13 @@ session_start();
 			<input type="text" name="token" placeholder="Enter Token" required><br><br>
 			
 			<label><b>New Password</b></label>
-			<input type="password" name="password" placeholder="Enter New Password" required><br><br>
+			<input type="password" name="newPassword" placeholder="Enter New Password" required><br><br>
 			
 			<label><b>Repeat New Password</b></label>
-			<input type="password" name="password" placeholder="Enter New Password Again" required><br><br>
-			
-			
+			<input type="password" name="repeatPassword" placeholder="Enter New Password Again" required><br><br>
 			<input type="submit" name="submit" value="Reset" onclick="return validatePassword()">
-			<a href = "/Index.php">
+			
+			<a href = "/index.php">
 			<input type="button" value="Home">
 			</a>
 		</form>
