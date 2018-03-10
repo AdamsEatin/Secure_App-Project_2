@@ -81,14 +81,7 @@ function decrypt($textToDecrypt){
 function write_file($who, $where, $what, $result){
 	$date = date('Y-m-d H:i:s');
 	$log = "$who" . ' - ' . $date . ' - ' . $where . ' - ' . $what . ' - ' . $result;
-	/*
-	$logfile = fopen('log.txt', 'a+');
-	$contents = fread($logfile, filesize('log.txt'));
-	$enc_log = encrypt($log);
-	$new_log = $contents . $enc_log . "\r\n";
-	
-	//$enc_log = encrypt($new_dec_log);
-	*/
+
 	$logfile = fopen('log.txt', 'a+');
 	$enc_log = encrypt($log);
 	
