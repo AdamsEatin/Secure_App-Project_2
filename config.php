@@ -4,6 +4,7 @@ $username = "root";
 $password = "secret";
 $databasename = "secureapp_db";
 $key = "super_secret_key_12345";
+$log_key = "not_so_super_secret_key_54321";
 
 date_default_timezone_set("UTC");
 
@@ -67,17 +68,6 @@ function validatePassword($username, $password){
 	exit();
 }
 
-
-function write_file($who, $where, $what, $result){
-	$logfile = fopen('log.txt', 'a+');
-	$date = date('Y-m-d H:i:s');
-	$log = $who . ' ' . $date . ' ' . $where . ' ' . $what . ' ' . $result;
-	$enc_log = encrypt($log);
-	fwrite($logfile, $enc_log . "\r\n");
-	fclose($logfile);
-}
-
-
 function encrypt($textToEncrypt){
 	global $key;
 	return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $textToEncrypt, MCRYPT_MODE_CBC, md5(md5($key))));
@@ -86,5 +76,23 @@ function encrypt($textToEncrypt){
 function decrypt($textToDecrypt){
 	global $key;
     return rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($key), base64_decode($textToDecrypt), MCRYPT_MODE_CBC, md5(md5($key))), "\0");
+}
+
+function write_file($who, $where, $what, $result){
+	$date = date('Y-m-d H:i:s');
+	$log = "$who" . ' - ' . $date . ' - ' . $where . ' - ' . $what . ' - ' . $result;
+	/*
+	$logfile = fopen('log.txt', 'a+');
+	$contents = fread($logfile, filesize('log.txt'));
+	$enc_log = encrypt($log);
+	$new_log = $contents . $enc_log . "\r\n";
+	
+	//$enc_log = encrypt($new_dec_log);
+	*/
+	$logfile = fopen('log.txt', 'a+');
+	$enc_log = encrypt($log);
+	
+	fwrite($logfile, $enc_log . "\r\n");
+	fclose($logfile);
 }
 ?>
