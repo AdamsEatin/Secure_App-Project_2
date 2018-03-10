@@ -29,7 +29,7 @@ session_start();
 			<input type="email" name="email" placeholder="Enter Email" required><br><br>
 			
 			<input type="submit" name="submit" value="Request">
-			<a href = "/Index.php">
+			<a href = "/index.php">
 			<input type="button" value="Home">
 			</a>
 		</form>

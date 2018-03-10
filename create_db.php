@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "secret";
-$db = "secureapp_db";
+$password = "";
+$db = "Project2";
 
 //create connection_aborted
 $conn = new mysqli($servername, $username, $password);
@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 } 
 
 // Create database
-$create_DB_SQL = "CREATE DATABASE secureapp_db";
+$create_DB_SQL = "CREATE DATABASE Project2";
 if ($conn->query($create_DB_SQL) === TRUE) {
 	$conn = new mysqli($servername, $username, $password, $db);
 
@@ -23,12 +23,12 @@ if ($conn->query($create_DB_SQL) === TRUE) {
 						`last_failed_login` datetime NOT NULL)";
 	
 	$create_reset_tb = "CREATE TABLE `reset_tb` (
-						`userID` text NOT NULL,
+						`email` text NOT NULL,
 						`token` text NOT NULL,
-						`time_issued` datetime NOT NULL)";
+						`expiration` datetime NOT NULL)";
 						
 	$create_user_tb = "CREATE TABLE `user_tb` (
-						`user_ID` text NOT NULL,
+						`userID` text NOT NULL,
 						`password` text NOT NULL,
 						`email` text NOT NULL,
 						`dob` text NOT NULL)";

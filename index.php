@@ -39,14 +39,14 @@
 						echo "<h3>Error creating the Database at this time.</h3>";
 						break;
 					case 8:
-						echo "<h3>Login Success!</h3>";
+						echo "<h3>Password Changed</h3>";
 						break;
 					case 9:
 						echo "<h3>This probably shouldn't have happened...</h3>";
 						break;
 					case 10:
-						$msg = $_SESSION["msg"];
-						echo "<h3>'$msg'</h3>";
+						echo "<h3>Database Created</h3>";
+						break;
 				}
 			}
 		?>  

@@ -27,6 +27,7 @@ if($count == 0){
 	exit();
 }
 else{
+	//if there are results, check for the presence of the encrypted user in the lockout table
 	$lockoutCheckSQL = "SELECT * FROM `login_tb` WHERE `userID`='$enc_user'";
 	$lockoutResult = $conn->query($lockoutCheckSQL);
 	$count = mysqli_num_rows($lockoutResult);

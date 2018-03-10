@@ -1,8 +1,12 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "secret";
-$databasename = "secureapp_db";
+$password = "";
+$databasename = "project2";
+
+$conn = new mysqli($servername, $username, $password, $databasename);
+
+
 $key = "super_secret_key_12345";
 $log_key = "not_so_super_secret_key_54321";
 

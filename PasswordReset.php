@@ -5,19 +5,6 @@ session_start();
 <!DOCTYPE html>
 <html>
 	<head>
-		<script>
-		function validatePassword(){
-			var regexCheck = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
-			var pass = document.forms["regForm"]["password"].value;
-			if(regexCheck.test(pass)){
-				return true;
-			}else{
-				alert("Passwords must; \n-Contain 1 uppercase letter \n-Contain 1 lower case letter \n-Contain 1 numeric character \n-Be at least 8 characters long")
-				return false;
-			}
-		}
-		</script>
-		
 		<meta charset="UTF-8">
 		<title>Secure App System 2.0 : Password Reset</title>
 		<link rel="stylesheet" type="text/css" href="main_page.css">
@@ -53,9 +40,6 @@ session_start();
 						$reset_tok = $_SESSION["reset_tok"];
 						echo "<h3>This token is valid for 5 minutes:<br> <i>$reset_tok</i></h3>";
 						break;
-					case 8:
-						echo "<h3>Passed</h3>";
-						break;
 				}
 			}
 		?>  
@@ -74,7 +58,7 @@ session_start();
 			
 			<label><b>Repeat New Password</b></label>
 			<input type="password" name="repeatPassword" placeholder="Enter New Password Again" required><br><br>
-			<input type="submit" name="submit" value="Reset" onclick="return validatePassword()">
+			<input type="submit" name="submit" value="Reset">
 			
 			<a href = "/index.php">
 			<input type="button" value="Home">

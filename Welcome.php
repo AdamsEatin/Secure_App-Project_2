@@ -11,7 +11,7 @@
 	</head>
 	
 	<body>
-		<h1>Welcome to the Secure App System 2.0!</h1>
+		<h1>Secure App System 2.0 : Welcome</h1>
 		
 		<h2>You've Successfully Logged In!</h2>
 		<h3>The standard Lorem Ipsum passage, used since the 1500s</h3>
@@ -21,7 +21,14 @@
 		Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
 		
 		<form>
+			<a href= "/readLogs.php">
+			<input type="button" value="Log Viewer">
+			</a>
 			<button formaction="/index.php">Logout</button>
+		</form>
+		<br>
+		<form>
+			
 		</form>
 	</body>
 </html>

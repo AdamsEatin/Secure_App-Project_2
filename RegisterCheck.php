@@ -1,7 +1,7 @@
 <?php 
 session_start();
 include 'config.php';
-$conn = new mysqli($servername, $username, $password, $databasename);
+
 
 //Retrieving values from form
 $userVal = $_POST["username"];
