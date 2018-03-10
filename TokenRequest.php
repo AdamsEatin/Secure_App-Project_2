@@ -48,6 +48,7 @@ if($email_present){
 		$conn->query($insertSQL);
 	
 		//redirecting back to the RequestToken Page
+		write_file($emailVal, "Requesting a Password Reset Token", $insertSQL, "New value was entered into reset_tb");
 		$_SESSION["errorCode"] = 7;
 		header("Location:PasswordReset.php");
 		exit();
@@ -58,13 +59,14 @@ if($email_present){
 		$conn->query($updateSQL);
 		
 		//redirecting back to the RequestToken Page
+		write_file($emailVal, "Requesting a Password Reset Token", $updateSQL, "Existing reset token value was updated");
 		$_SESSION["errorCode"] = 7;
 		header("Location:PasswordReset.php");
 		exit();
-	
 	}
 }
 else{
+	write_file($emailVal, "Requesting a Password Reset Token", $checkSQL, "Email address was not found in the table");
 	$_SESSION["errorCode"] = 1;
 	header("Location:RequestToken.php");
 	exit();

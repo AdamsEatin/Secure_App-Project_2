@@ -50,5 +50,4 @@ session_start();
 
 <?php
     unset($_SESSION["errorCode"]);
-	unset($_SESSION["msg"]);
 ?>

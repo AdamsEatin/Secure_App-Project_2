@@ -5,6 +5,8 @@ $password = "secret";
 $databasename = "secureapp_db";
 $key = "super_secret_key_12345";
 
+date_default_timezone_set("UTC");
+
 function validatePassword($username, $password){
 	$lowUser = strtolower($username);
 	$lowPass = strtolower($password);
@@ -64,6 +66,17 @@ function validatePassword($username, $password){
 	return TRUE;
 	exit();
 }
+
+
+function write_file($who, $where, $what, $result){
+	$logfile = fopen('log.txt', 'a+');
+	$date = date('Y-m-d H:i:s');
+	$log = $who . ' ' . $date . ' ' . $where . ' ' . $what . ' ' . $result;
+	$enc_log = encrypt($log);
+	fwrite($logfile, $enc_log . "\r\n");
+	fclose($logfile);
+}
+
 
 function encrypt($textToEncrypt){
 	global $key;

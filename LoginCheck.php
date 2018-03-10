@@ -21,6 +21,7 @@ $count = mysqli_num_rows($result);
 
 //If no results, return to index
 if($count == 0){
+	write_file($user, "Attempted Login to the system", $loginCheckSQL, "No user found");
 	$_SESSION["errorCode"] = 2;
 	header("Location:index.php");
 	exit();
@@ -53,7 +54,8 @@ else{
 	//login attempt was under 5m ago, user is locked out.
 	if($row_count >= 5 && $diff < 300){
 		$lockedOutSQL = "UPDATE `login_tb` SET `failed_login_count`=`failed_login_count`+1 ,`last_failed_login`=now() WHERE `userID` = '$enc_user'";
-		$conn->query($lockedOutSQL);	
+		$conn->query($lockedOutSQL);
+		write_file($user, "Attempted Login to the system", $lockedOutSQL, "Account is currently locked out.");
 		$_SESSION["errorCode"] = 1;
 		header("Location:index.php");
 		exit();
@@ -67,6 +69,7 @@ else{
 			$conn->query($loginSuccessSQL);
 				
 			//Send user to welcome page, showing login successful
+			write_file($user, "Attempted Login to the system", $loginSuccessSQL, "Successfully logged into the system.");
 			header("Location:Welcome.php");
 			exit();
 		}
@@ -76,6 +79,7 @@ else{
 			$conn->query($loginFailSQL);
 				
 			//Return failed login
+			write_file($user, "Attempted Login to the system", $loginFailSQL, "Failed to authenticate with the system.");
 			$_SESSION["errorCode"] = 0;
 			header("Location:index.php");
 			exit();
@@ -83,6 +87,7 @@ else{
 	}
 }
 //In the even that an error is not caught
+write_file($user, "Attempted Login to the system", "NA", "This probably shouldn't have happened.");
 $_SESSION["errorCode"] = 9;
 header("Location:index.php");
 exit();

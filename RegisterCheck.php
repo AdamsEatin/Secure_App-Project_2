@@ -43,7 +43,8 @@ while($row = $result->fetch_assoc()){
 }
 
 //if either the userID or email are present then return the user with an error
-if($userPresent || $emailPresent ){
+if($userPresent || $emailPresent){
+	write_file($user, "Attempted to Register with the System", $checkSQL, "UserID or Email was already within the system.");
 	$_SESSION["errorCode"] = 1;
 	header("Location:Register.php");
 	exit();
@@ -51,6 +52,7 @@ if($userPresent || $emailPresent ){
 //If the password entered is not valid then return the user saying so
 if(!validatePassword($user, $pass)){
 	$_SESSION["errorCode"] = 2;
+	write_file($user, "Attempted to Register with the System", "validatePassword(" . $user . "," . $pass . ")", "Password was not the correct format.");
 	header("Location:Register.php");
 	exit();
 }

@@ -34,16 +34,26 @@ while($row = $result->fetch_assoc()){
 		break;
 	}
 }
+
 //If email_present is set to False, return with an error
 if(!$email_present){
+	write_file($email, "Attempted to reset password", $checkSQL, "Email was not present in the DB.");
 	$_SESSION["errorCode"] = 1;
 	header("Location:PasswordReset.php");
 	exit();
 }
 
+//Getting username for logging and later password validation
+$selectSQL = "SELECT * FROM `user_tb` WHERE `email` = '$row_email'";
+$selectResult = $conn->query($selectSQL);
+$selectRow = $selectResult->fetch_assoc();
+$username = $selectRow['userID'];
+$decUser = decrypt($username);
+
 //If Date of Birth is incorrect, return with an error
 $dec_dob = decrypt($row_dob);
 if($dob != $dec_dob){
+	write_file($decUser, "Attempted to reset password", "$dob != $dec_dob", "Date of Birth was incorrect");
 	$_SESSION["errorCode"] = 2;
 	header("Location:PasswordReset.php");
 	exit();
@@ -67,6 +77,7 @@ while($row = $result->fetch_assoc()){
 
 //if the token wasn't found within the table, return with an error
 if(!$token_present){
+	write_file($decUser, "Attempted to reset password", $tokenQuerySQL, "Reset token was not found");
 	$_SESSION["errorCode"] = 5;
 	header("Location:PasswordReset.php");
 	exit();
@@ -78,20 +89,15 @@ $expiration = strtotime($row_exp);
 
 //if the current time is greater than the expiration return the user
 if($curr > $expiration){
+	write_file($decUser, "Attempted to reset password", "if($curr > $expiration){", "Reset token was expired");
 	$_SESSION["errorCode"] = 4;
 	header("Location:PasswordReset.php");
 	exit();
 }
 
-//Getting username to pass for password validation
-$selectSQL = "SELECT * FROM `user_tb` WHERE `email` = '$row_email'";
-$selectResult = $conn->query($selectSQL);
-$selectRow = $selectResult->fetch_assoc();
-$username = $selectRow['userID'];
-$decUser = decrypt($username);
-
 //Taking in the passwords, encrypting them and validating against each other
 if(!validatePassword($decUser, $newPasVal)){
+	write_file($decUser, "Attempted to reset password", "if(!validatePassword(" . $decUser . ", " . $newPasVal . "){", "Password was not in the correct format");
 	$_SESSION["errorCode"] = 3;
 	header("Location:PasswordReset.php");
 	exit();
@@ -101,6 +107,7 @@ if(!validatePassword($decUser, $newPasVal)){
 $enc_newPas = encrypt($newPasVal);
 $enc_repPas = encrypt($repPasVal);
 if($enc_newPas !== $enc_repPas){
+	write_file($decUser, "Attempted to reset password", "if(" . $enc_newPas . " !== " . $enc_repPas . "){", "Passwords did not match");
 	$_SESSION["errorCode"] = 6;
 	header("Location:PasswordReset.php");
 	exit();
@@ -109,6 +116,7 @@ if($enc_newPas !== $enc_repPas){
 //Updating user password in user_tb
 $updateSQL = "UPDATE `user_tb` SET `password`='$enc_newPas' WHERE `email`= '$row_email'";
 $conn->query($updateSQL);
+write_file($decUser, "Attempted to reset password", $updateSQL, "Password was reset");
 $_SESSION["errorCode"] = 8;
 header("Location:index.php");
 exit();
