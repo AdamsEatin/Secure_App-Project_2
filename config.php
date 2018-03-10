@@ -5,14 +5,64 @@ $password = "secret";
 $databasename = "secureapp_db";
 $key = "super_secret_key_12345";
 
-
-function validatePassword($password){
-	$regex = "/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/";
-	if(preg_match($regex, $password)){
-		return TRUE;
+function validatePassword($username, $password){
+	$lowUser = strtolower($username);
+	$lowPass = strtolower($password);
+	
+	//check for immediately containing username
+	if(strpos($lowPass, $lowUser) !== FALSE){
+		return FALSE;
 		exit();
 	}
-	return FALSE;
+	
+	//check for presence of various delimiters
+	//	-fullstop, comma, dash, underscore, space, pound sign, tabs
+	$delims = array('.', ',', '-', '_', ' ', '£', '\t');
+	foreach($delims as $val){	
+		if(strpos($lowUser, $val) !== FALSE){
+			$subStrings = explode($val, $lowUser);
+			foreach($subStrings as &$x){
+				if(strpos($x, $lowPass) !== FALSE){
+					return FALSE;
+					exit();
+				}
+			}
+		}
+	}
+	
+	$count = 0;
+	//Checking for the password length
+	if(preg_match("/^\S{8,}$/", $password)){
+		$count++;
+	}
+	//Checking for Upper Characters
+	if(preg_match("/[A-Z]/", $password)){
+		$count++;
+	}
+	//Checking for lower characters
+	if(preg_match("/[a-z]/", $password)){
+		$count++;
+	}
+	//Checking for digits
+	if(preg_match("/[0-9]/", $password)){
+		$count++;
+	}
+	//Checking for symbols
+	if(preg_match("/[-!$%^&*()_+|~=`{}\[\]:\";'<>?,.\/]/", $password)){
+		$count++;
+	}
+	//Checking for non-english unicode characters
+	if(preg_match("/[\x{0080}-\x{FFFF}]/", $password)){
+		$count++;
+	}
+	//If less than three conditions were met, return failed.
+	if($count < 3){
+		return FALSE;
+		exit();
+	}
+	
+	return TRUE;
+	exit();
 }
 
 function encrypt($textToEncrypt){

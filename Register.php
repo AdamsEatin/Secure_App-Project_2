@@ -23,10 +23,6 @@ session_start();
 					case 2:
 						echo "<h3>Password did not match the required format</h3>";
 						break;
-					case 3:
-						$msg = $_SESSION["msg"];
-						echo "<h3>$msg</h3>";
-						break;
 				}
 			}
 		?>  

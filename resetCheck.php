@@ -11,7 +11,6 @@ $tokenVal = $_POST["token"];
 $newPasVal = $_POST["newPassword"];
 $repPasVal = $_POST["repeatPassword"];
 
-
 //clean values from special characters
 $email = htmlspecialchars($emailVal);
 $dob = htmlspecialchars($dobVal);
@@ -84,8 +83,15 @@ if($curr > $expiration){
 	exit();
 }
 
+//Getting username to pass for password validation
+$selectSQL = "SELECT * FROM `user_tb` WHERE `email` = '$row_email'";
+$selectResult = $conn->query($selectSQL);
+$selectRow = $selectResult->fetch_assoc();
+$username = $selectRow['userID'];
+$decUser = decrypt($username);
+
 //Taking in the passwords, encrypting them and validating against each other
-if(!validatePassword($newPasVal)){
+if(!validatePassword($decUser, $newPasVal)){
 	$_SESSION["errorCode"] = 3;
 	header("Location:PasswordReset.php");
 	exit();
@@ -104,7 +110,7 @@ if($enc_newPas !== $enc_repPas){
 $updateSQL = "UPDATE `user_tb` SET `password`='$enc_newPas' WHERE `email`= '$row_email'";
 $conn->query($updateSQL);
 $_SESSION["errorCode"] = 8;
-header("Location:PasswordReset.php");
+header("Location:index.php");
 exit();
 
 ?>
